@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  </head>
+  <body>
+    <div style="margin-top: 30px;" class="container text">
+        <div class="row align-items-start">
+          <div class="col">
+            <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                  <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                  <span class="fs-4">Clarion Call</span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                  <li class="nav-item">
+                    <a href="/" class="nav-link active" aria-current="page">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                      Home
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link link-dark">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                      Groups
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/myPosts" class="nav-link link-dark">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                      My posts
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link link-dark">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                      Stories
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/favPage" class="nav-link link-dark">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+                      favourite
+                    </a>
+                  </li>
+                </ul>
+                <hr>
+                <div class="dropdown">
+                  {% if user %}
+                  <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <strong>{{user}}</strong>
+                  </a>
+                  <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Add catagory</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/logout">SIGN OUT</a></li>
+                  </ul>
+                  {% else %}
+              <ul class="nav nav-pills flex-column mb-auto">
+                <li>
+                    <a href="/login" class="nav-link link-dark">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                      SIGN IN
+                    </a>
+                 </li>
+                  <li>
+                    <a href="/register" class="nav-link link-dark">
+                      <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                      SIGN UP
+                    </a>
+                  </li>
+                </ul>
+                  {% endif %}
+                </div>
+              </div>
+          </div>
+
+
+          <div class="col-7">
+            <div>
+                  <div class="mr-5">
+                    <a class="btn btn-primary" href="/create">Create Post</a>
+                  </div>
+              <br>
+
+
+                  <form action='/searchPosts' method="POST">
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" name="searc" placeholder="Search post">
+                  <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                  </div>
+                  </div>
+                  </form>
+
+            </div>
+            <br>
+
+
+            {% for t in posts %}
+            <article style="padding: 10px; box-shadow: 3px 3px 3px #888888;" class="media content-section card">
+                <div class="media-body">
+                  <h2><a style="text-decoration: none;" class="article-title" href="#">{{t["title"]}}</a></h2>
+                  <div class="article-metadata">
+                    <a class="mr-2" href="#">{{t["author"]}}</a><small>-</small>
+                    <small class="text-muted">{{t["date"]}}</small>
+                  </div>
+                  <p class="article-content">
+                      {{t["description"]}}
+                  </p>
+                  
+                  <div>
+                    {% if t["image"] %}
+                    <img class="article-content" width="100%" height="750px" src='static/img/{{t["image"]}}'>
+                    {% endif %}
+                  </div>
+                </div>
+                <br>
+                
+                <div class="input-group mb-3">
+                  <form action='/fav/{{t["_id"]}}' method="POST">
+                    <button class="btn btn-warning me-1" type="submit">
+                      <i class="fa-regular fa-heart"></i>
+                    </button>
+                  </form>
+                <form method="POST" action='/comments/{{t["_id"]}}'>
+                    <div class="input-group mb-3">
+                        <input type="text" style="width:75%; position: relative" name="comm" placeholder="Comment">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                    </button>
+                    </div>
+                </form>
+                  <button class="btn me-1">
+                        <i class="fas fa-ellipsis-v"></i>
+                  </button>
+                </div>
+              <div style="z-index:5; " class="text-center">
+                    {% if user==t["author"] %}
+                    <a class="btn btn-warning" href='/edit/{{t["_id"]}}'>
+                        <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                    </a>
+
+                    <a class="btn btn-danger" href='/delete/{{t["_id"]}}'>
+                        <i class="fa-solid fa-trash-can fa-lg"></i>
+                    </a>
+
+                  {% endif %}
+                  </div>
+              </article>
+              {% for c in commen %}
+              {% if t["_id"]==commen["id"] %}
+              <h1>visited</h1>
+                    {{commen["commenter"]}}
+                    {{commen["comment"]}}
+              {% endif %}
+            {% endfor %}
+              <br>
+            {% endfor %}
+
+          </div>
+          <div class="col">
+            <aside class="col-9 blog-sidebar">        
+                <div class="p-3">
+                  <h4 class="font-italic">Archives</h4>
+                  <ol class="list-unstyled mb-0">
+                    <li><a href="#">March 2014</a></li>
+                    <li><a href="#">February 2014</a></li>
+                    <li><a href="#">January 2014</a></li>
+                    <li><a href="#">December 2013</a></li>
+                    <li><a href="#">November 2013</a></li>
+                    <li><a href="#">October 2013</a></li>
+                    <li><a href="#">September 2013</a></li>
+                    <li><a href="#">August 2013</a></li>
+                    <li><a href="#">July 2013</a></li>
+                    <li><a href="#">June 2013</a></li>
+                    <li><a href="#">May 2013</a></li>
+                    <li><a href="#">April 2013</a></li>
+                  </ol>
+                </div>
+        
+                <div class="p-3">
+                  <h4 class="font-italic">Elsewhere</h4>
+                  <ol class="list-unstyled">
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Facebook</a></li>
+                  </ol>
+                </div>
+              </aside>
+          </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
